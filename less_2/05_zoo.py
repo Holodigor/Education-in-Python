@@ -15,6 +15,7 @@ birds = ['rooster', 'ostrich', 'lark', ]
 #  и выведите список на консоль
 zoo = zoo + birds
 print(zoo)
+print(zoo)
 
 # уберите слона
 #  и выведите список на консоль
