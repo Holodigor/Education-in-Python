@@ -8,19 +8,45 @@
 #
 # Результат проверки вывести на консоль (ДА/НЕТ)
 # Использовать только операторы if/elif/else, можно вложенные
+from pprint import pprint
+
+
+def paper_fit_in_envelope (envelop_x, envelop_y, paper_x, paper_y):
+    if envelop_x >= paper_x and envelop_y >= paper_y:
+        print('да')
+        return 1
+    elif envelop_y >= paper_x and envelop_x >= paper_y:
+        print('да')
+        return 1
+    else:
+        print('нет')
+        return 1
 
 envelop_x, envelop_y = 10, 7
 paper_x, paper_y = 8, 9
-# проверить для
-# paper_x, paper_y = 9, 8
-# paper_x, paper_y = 6, 8
-# paper_x, paper_y = 8, 6
-# paper_x, paper_y = 3, 4
-# paper_x, paper_y = 11, 9
-# paper_x, paper_y = 9, 11
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
+paper_x, paper_y = 9, 8
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
+paper_x, paper_y = 6, 8
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
+paper_x, paper_y = 8, 6
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
+paper_x, paper_y = 3, 4
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
+paper_x, paper_y = 11, 9
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
+paper_x, paper_y = 9, 11
+pprint(f'envelop: {envelop_x} and {envelop_y} , paper:{paper_x} and {paper_y}')
+paper_fit_in_envelope(envelop_x, envelop_y, paper_x, paper_y)
 # (просто раскоментировать нужную строку и проверить свой код)
 
-# TODO здесь ваш код
+
 
 # Усложненное задание, решать по желанию.
 # Заданы размеры hole_x, hole_y прямоугольного отверстия и размеры brick_х, brick_у, brick_z кирпича (все размеры
@@ -49,4 +75,4 @@ paper_x, paper_y = 8, 9
 # brick_x, brick_y, brick_z = 3, 11, 6
 # (просто раскоментировать нужную строку и проверить свой код)
 
-# TODO здесь ваш код
+

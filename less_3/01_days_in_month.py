@@ -24,8 +24,8 @@ day_in_mans = {
     12: (31, 'декабре'),
 
 }
-label = 1
-while label:
+
+while True:
     user_input = input("Введите, пожалуйста, номер месяца: ")
     month = int(user_input)
     print('Вы ввели', month)
@@ -33,7 +33,7 @@ while label:
         if 1 < month < 13:
             print(f'в {day_in_mans[month][1]} {day_in_mans[month][0]} '
                  f'{"дней" if day_in_mans[month][0]%2 == 0 else "день" }')
-            label = 0
+            break
         else:
             print(f'Номер месяца некорректен')
     else:

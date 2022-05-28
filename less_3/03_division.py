@@ -10,4 +10,11 @@
 
 a, b = 179, 37
 
-# TODO здесь ваш код
+variable = a
+while variable > 0:
+    if round(variable / b, 0) * b == variable:
+        print(f'Целочисленное деление {a} на {b} дает {int(a/b)}')
+        break
+    variable -= 1
+else:
+    print('не делится')

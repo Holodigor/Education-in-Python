@@ -11,4 +11,10 @@
 
 educational_grant, expenses = 10000, 12000
 
-# TODO здесь ваш код
+sum_many = 0
+month = 10
+while month != 0:
+    sum_many += expenses - educational_grant
+    expenses += expenses / 100 * 3
+    month -= 1
+print(f'Студенту надо попросить {round(sum_many,2)} рублей')
