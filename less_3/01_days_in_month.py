@@ -7,9 +7,7 @@
 # Если номер месяца некорректен - сообщить об этом
 
 # Номер месяца получать от пользователя следующим образом
-user_input = input("Введите, пожалуйста, номер месяца: ")
-month = int(user_input)
-print('Вы ввели', month)
+
 
 day_in_mans = {
     1: (30, 'январе'),
@@ -26,10 +24,17 @@ day_in_mans = {
     12: (31, 'декабре'),
 
 }
-if isinstance(month, int):
-    if 1 < month < 12:
-        print(f'в {day_in_mans[month][1]} {day_in_mans[month][0]} дней') # TODO дни в дней
+label = 1
+while label:
+    user_input = input("Введите, пожалуйста, номер месяца: ")
+    month = int(user_input)
+    print('Вы ввели', month)
+    if isinstance(month, int):
+        if 1 < month < 13:
+            print(f'в {day_in_mans[month][1]} {day_in_mans[month][0]} '
+                 f'{"дней" if day_in_mans[month][0]%2 == 0 else "день" }')
+            label = 0
+        else:
+            print(f'Номер месяца некорректен')
     else:
-        print(f'номер месяца некорректен')
-else:
-        print(f'номер месяца некорректен')
+            print(f'номер месяца некорректен')
