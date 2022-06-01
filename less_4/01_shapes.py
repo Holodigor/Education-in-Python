@@ -66,10 +66,10 @@ def draw_hexagon(start_point_x=100, start_point_y=100, angle=0, lenght=200):
     draw_figure(point=point, angle=angle, lenght=lenght, angles=10)
 
 
-draw_triangle(100, 100, lenght=100)
-draw_square(600, 100, lenght=200)
-draw_pentagon(100, 400, lenght=150)
-draw_hexagon(600, 400, lenght=100)
+draw_triangle(200, 200, lenght=150, angle=20)
+draw_square(600, 200, lenght=150, angle=50)
+draw_pentagon(200, 600, lenght=150, angle=60)
+draw_hexagon(600, 600, lenght=100, angle=70)
 
 sd.sleep(5)
 sd.quit()
