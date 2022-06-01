@@ -27,7 +27,52 @@ import simple_draw as sd
 # sd.line()
 # Результат решения см lesson_004/results/exercise_01_shapes.jpg
 
-# TODO здесь ваш код
+sd.set_screen_size(1000, 1000)
+
+x, y, = 300, 300
+
+
+def draw_figure(point, angle, lenght, angles):
+    next_angel = 360 / angles
+    vector = sd.get_vector(start_point=point, angle=angle, length=lenght)
+    point_line = vector.end_point
+    while next_angel < 360:
+        vector = sd.get_vector(start_point=vector.end_point, angle=angle + next_angel, length=lenght)
+        vector.draw(width=3)
+        sd.circle(vector.end_point, radius=4, width=0)
+        next_angel += 360 / angles
+    sd.line(start_point=vector.end_point, end_point=point_line, width=3)
+    sd.circle(point_line, radius=4, width=0)
+
+
+
+def draw_triangle(start_point_x=100, start_point_y=100, angle=0, lenght=200):
+    point = sd.get_point(start_point_x, start_point_y)
+    draw_figure(point=point, angle=angle, lenght=lenght, angles=3)
+
+
+def draw_square(start_point_x=100, start_point_y=100, angle=0, lenght=200):
+    point = sd.get_point(start_point_x, start_point_y)
+    draw_figure(point=point, angle=angle, lenght=lenght, angles=4)
+
+
+def draw_pentagon(start_point_x=100, start_point_y=100, angle=0, lenght=200):
+    point = sd.get_point(start_point_x, start_point_y)
+    draw_figure(point=point, angle=angle, lenght=lenght, angles=5)
+
+
+def draw_hexagon(start_point_x=100, start_point_y=100, angle=0, lenght=200):
+    point = sd.get_point(start_point_x, start_point_y)
+    draw_figure(point=point, angle=angle, lenght=lenght, angles=10)
+
+
+draw_triangle(100, 100, lenght=100)
+draw_square(600, 100, lenght=200)
+draw_pentagon(100, 400, lenght=150)
+draw_hexagon(600, 400, lenght=100)
+
+sd.sleep(5)
+sd.quit()
 
 # Часть 1-бис.
 # Попробуйте прикинуть обьем работы, если нужно будет внести изменения в этот код.
