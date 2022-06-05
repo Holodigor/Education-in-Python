@@ -41,6 +41,5 @@ def rainbow(width=10):
 
 if __name__ == '__main__':
     rainbow()
-
     sd.sleep(2)
     sd.quit()

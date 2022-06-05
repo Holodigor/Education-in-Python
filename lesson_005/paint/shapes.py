@@ -27,9 +27,7 @@ import simple_draw as sd
 # sd.line()
 # Результат решения см lesson_004/results/exercise_01_shapes.jpg
 
-sd.set_screen_size(1000, 1000)
 
-x, y, = 300, 300
 
 
 def draw_figure(point, angle, lenght, angles):
@@ -39,10 +37,10 @@ def draw_figure(point, angle, lenght, angles):
     while next_angel < 360:
         vector = sd.get_vector(start_point=vector.end_point, angle=angle + next_angel, length=lenght)
         vector.draw(width=3)
-        sd.circle(vector.end_point, radius=4, width=0)
+
         next_angel += 360 / angles
     sd.line(start_point=vector.end_point, end_point=point_line, width=3)
-    sd.circle(point_line, radius=4, width=0)
+
 
 
 def draw_triangle(start_point_x=100, start_point_y=100, angle=0, lenght=200):
@@ -66,6 +64,9 @@ def draw_hexagon(start_point_x=100, start_point_y=100, angle=0, lenght=200):
 
 
 if __name__ == '__main__':
+    sd.set_screen_size(1000, 1000)
+
+    x, y, = 300, 300
     draw_triangle(200, 200, lenght=150, angle=20)
     draw_square(600, 200, lenght=150, angle=0)
     draw_pentagon(200, 600, lenght=150, angle=60)

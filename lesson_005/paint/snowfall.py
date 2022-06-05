@@ -16,23 +16,23 @@ import simple_draw as sd
 # sd.user_want_exit()
 
 
-def christmas_snow(number_of_snowflakes=20, height=sd.resolution[0], wight=sd.resolution[1]):
+def christmas_snow(number_of_snowflakes=20, wight=sd.resolution[0], height=sd.resolution[1]):
     n = number_of_snowflakes
     snow_center_list = []
     snow_length_list = []
     for i in range(n):
-        snow_center_list.append(sd.get_point(sd.random_number(-200, 600), sd.random_number(500, 900)))
+        snow_center_list.append(sd.get_point(sd.random_number(0, wight), height))
         snow_length_list.append(sd.random_number(10, 50))
     while True:
         sd.start_drawing()
         for i, point in enumerate(snow_center_list):
-            if point.y > snow_length_list[i] and point.x < 600:
+            if point.y > snow_length_list[i] and point.x < wight:
                 sd.snowflake(center=point, length=snow_length_list[i])
             else:
                 if point.y <= snow_length_list[i]:
                     sd.snowflake(center=point, length=snow_length_list[i])
-                point.y = sd.random_number(600, 700)
-                point.x = sd.random_number(-30, 600)
+                point.y = height
+                point.x = sd.random_number(0, wight)
         sd.finish_drawing()
 
         sd.sleep(0.05)
