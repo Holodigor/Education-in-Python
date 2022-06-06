@@ -42,5 +42,32 @@
 # Движок игры реализует только саму функциональность игры.
 # Это пример применения SOLID принципа (см https://goo.gl/GFMoaI) в архитектуре программ.
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
+from colorama import Fore, Style
 
-# TODO здесь ваш код...
+from less_6.mastermind_engine import think_number, check_number, correct_number, count_players
+
+config = count_players()
+print(Style.BRIGHT + Fore.LIGHTYELLOW_EX + "\nС Т А Р Т\n")
+think_number()
+print(Fore.BLUE + "Загадано четырех значное число\n " + Style.RESET_ALL)
+
+player_1 = 'Игрок - 1'
+player_2 = 'Игрок - 2' if config else 'Игрок - 1'
+step = player_1
+while True:
+    color = Style.RESET_ALL + Style.BRIGHT + Fore.GREEN \
+        if step == player_1 else Style.RESET_ALL + Style.BRIGHT + Fore.MAGENTA
+    number = input(color + '{} Угадайте число: '.format(step))
+
+    while not correct_number(number=number):
+        number = input(Style.RESET_ALL + Style.BRIGHT + Fore.RED + 'Введите Верноe число: ' + Style.RESET_ALL)
+
+    result = check_number(number=number)
+
+    if result == 0:
+        print(Style.BRIGHT + Fore.LIGHTMAGENTA_EX + '\nВы угадали, победил {}\n'.format(step))
+        break
+    else:
+        print(Style.RESET_ALL + Style.BRIGHT + Fore.LIGHTWHITE_EX + '   Быки - {} Коровы - {}'.format(result['bulls'],
+                                                                                                      result['cows']))
+        step = player_1 if step == player_2 else player_2
