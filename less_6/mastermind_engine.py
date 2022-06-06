@@ -61,6 +61,7 @@ def count_players():
 
 
 if __name__ == "__main__":
+    count_players()
     number = '1569'
     think_number()
     print('secret_number', secret_number)

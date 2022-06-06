@@ -47,6 +47,7 @@ from colorama import Fore, Style
 from less_6.mastermind_engine import think_number, check_number, correct_number, count_players
 
 config = count_players()
+
 print(Style.BRIGHT + Fore.LIGHTYELLOW_EX + "\nС Т А Р Т\n")
 think_number()
 print(Fore.BLUE + "Загадано четырех значное число\n " + Style.RESET_ALL)
