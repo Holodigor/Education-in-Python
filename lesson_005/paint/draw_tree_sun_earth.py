@@ -3,9 +3,6 @@ from random import random
 
 import simple_draw as sd
 
-sd.set_screen_size(1200, 600)
-sd.background_color = sd.COLOR_BLUE
-
 
 # 1) Написать функцию draw_branches, которая должна рисовать две ветви дерева из начальной точки
 # Функция должна принимать параметры:
@@ -49,6 +46,8 @@ def draw_earth():
 
 
 if __name__ == '__main__':
+    sd.set_screen_size(1200, 600)
+    sd.background_color = sd.COLOR_BLUE
     point = sd.get_point(600, 30)
     draw_earth()
     draw_sun(point)
@@ -80,4 +79,4 @@ if __name__ == '__main__':
 # Пригодятся функции
 # sd.random_number()
 
-sd.pause()
+    sd.pause()
