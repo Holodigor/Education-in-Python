@@ -39,26 +39,15 @@ wall.wall(point=point_bilding, width=400, height=400)
 smile_point = sd.get_point(500, 220)
 smile.smile(center_smile=smile_point)
 
-point_tree =sd.get_point(800, 20)
+point_tree = sd.get_point(800, 20)
 draw_tree_sun_earth.draw_branches(point=point_tree, lenght=130)
-point_tree =sd.get_point(850, 20)
+point_tree = sd.get_point(850, 20)
 draw_tree_sun_earth.draw_branches(point=point_tree, lenght=80)
 
-
-
-
-snowfall.christmas_snow(wight=240, height=500, floor_height=sd.resolution[1]/6)
-
-
-
-
-
-
+snowfall.christmas_snow(wight=240, height=500, floor_height=sd.resolution[1] / 6)
 
 sd.pause()
 sd.quit()
-
-
 
 # Усложненное задание (делать по желанию)
 # Анимировать картину.
