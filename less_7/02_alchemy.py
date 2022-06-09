@@ -19,9 +19,12 @@
 #   print(Water(), '+', Air(), '=', Water() + Air())
 #   print(Fire(), '+', Air(), '=', Fire() + Air())
 
+from colorama import Fore, Back, Style
+
+
 class Air:
     def __str__(self):
-        return f'Я воздух'
+        return Fore.BLUE + 'Я воздух' + Style.RESET_ALL
 
     def __add__(self, other):
         if isinstance(other, Water):
@@ -60,7 +63,7 @@ class Lava:
 
 class Fire:
     def __str__(self):
-        return f'Я огонь'
+        return Fore.RED + f'Я огонь' + Style.RESET_ALL
 
     def __add__(self, other):
         if isinstance(other, Water):
@@ -91,7 +94,7 @@ class Dust:
 
 class Earth:
     def __str__(self):
-        return f'Я земля'
+        return Fore.YELLOW + 'Я земля' + Style.RESET_ALL
 
     def __add__(self, other):
         if isinstance(other, Water):
@@ -114,7 +117,7 @@ class Dirt:
 
 class Water:
     def __str__(self):
-        return f'Я вода'
+        return Fore.LIGHTBLUE_EX + 'Я вода'  + Style.RESET_ALL
 
     def __add__(self, other):
         if isinstance(other, Air):
@@ -133,10 +136,7 @@ if __name__ == '__main__':
     print(Fire(), '+', Water(), '=', Fire() + Water())
     print(Fire(), '+', Earth(), '=', Fire() + Earth())
     print(Air(), '+', Lightning(), '=', Air() + Lightning())
-    f = Fire()
-    w = Water()
-    res = f + w
-    print(res)
+
 # Усложненное задание (делать по желанию)
 # Добавить еще элемент в игру.
 # Придумать что будет при сложении существующих элементов с новым.
