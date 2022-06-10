@@ -30,6 +30,7 @@ from random import randint
 class House:
 
     def __init__(self, number):
+        self.tenants_of_the_house = []
         self.money = 100
         self.food = 100
         self.food_cat = 0
@@ -54,10 +55,12 @@ class Man:
 
     def settle_in_the_house(self, house):
         self.house = house
+        self.house.tenants_of_the_house.append(self)
         print(f'{self.name} Переехал в дом')
 
     def pick_up_a_cat(self, other):
         other.house = self.house
+        self.house.tenants_of_the_house.append(other)
         print(f'{self.name} подобрал кота {other.name}')
 
     def buy_cat_food(self):
@@ -95,7 +98,8 @@ class Man:
     def action(self):
         if self.satiety == 0:
             print(f'{self.name} умер')
-        elif self.satiety <= 30:
+            return
+        if self.satiety <= 30:
             self.eat()
         elif self.house.food < 30:
             self.buy_my_food()
@@ -140,7 +144,8 @@ class Cat:
     def action(self):
         if self.satiety == 0:
             print(f'{self.name} умер')
-        elif self.satiety <= 10:
+            return
+        if self.satiety <= 10:
             self.eat()
         else:
             random_action = randint(1, 2)
@@ -152,15 +157,21 @@ class Cat:
 
 if __name__ == '__main__':
     vasia = Man('Вася')
+    vika = Man('Vika')
+    petya = Man('Petya')
     murzik = Cat('Мурзик')
+    tom = Cat('TOM')
     house = House(43)
     vasia.settle_in_the_house(house=house)
+    vika.settle_in_the_house(house)
+    petya.settle_in_the_house(house)
     vasia.pick_up_a_cat(murzik)
+    vasia.pick_up_a_cat(tom)
     vasia.buy_cat_food()
     for i in range(25):
         print(f'=============== день {i} ===================')
-        vasia.action()
-        murzik.action()
+        for tenants in house.tenants_of_the_house:
+            tenants.action()
 # Усложненное задание (делать по желанию)
 # Создать несколько (2-3) котов и подселить их в дом к человеку.
 # Им всем вместе так же надо прожить 365 дней.
