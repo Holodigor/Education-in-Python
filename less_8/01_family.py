@@ -278,11 +278,14 @@ class Cat:
         self.house.dirt += 5
         cprint(f'кот {self.name} Драл обоии', color='magenta')
 
+
 home = House()
 serge = Husband(name='Сережа', house=home)
 masha = Wife(name='Маша', house=home)
 dron = Child(name='ДРОН', house=home)
-murzik = Cat(name='Мурзик', house=home)
+list_cat = []
+for number_cat in range(1, 6):
+    list_cat.append(Cat(name=str(number_cat), house=home))
 
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
@@ -290,19 +293,20 @@ for day in range(365):
     serge.act()
     masha.act()
     dron.act()
-    murzik.act()
+    for cat in list_cat:
+        cat.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(dron, color='cyan')
-    cprint(murzik, color='cyan')
+    for cat in list_cat:
+        cprint(cat, color='cyan')
     cprint(home, color='cyan')
 print('\n ========== ИТОГИ ===========\n')
 cprint(f'Cьедено еды {House.total_food}')
 cprint(f'Заработано денег {Husband.total_money}')
 cprint(f'Куплено шуб {Wife.total_fur_coat}')
 
-# TODO после реализации первой части - отдать на проверку учителю
-#сколько было заработано денег, сколько сьедено еды, сколько куплено шуб.
+# сколько было заработано денег, сколько сьедено еды, сколько куплено шуб.
 ######################################################## Часть вторая
 # #
 # # После подтверждения учителем первой части надо
@@ -346,6 +350,8 @@ cprint(f'Куплено шуб {Wife.total_fur_coat}')
 #         pass
 #
 #
+
+
 # ######################################################## Часть вторая бис
 # #
 # # После реализации первой части надо в ветке мастер продолжить работу над семьей - добавить ребенка
