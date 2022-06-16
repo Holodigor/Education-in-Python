@@ -149,6 +149,8 @@ class Wife(Man):
             self.buy_fur_coat()
         elif self.house.food < 60:
             self.shopping()
+        elif self.house.cat_food < 20 * Cat.total_cat:
+            self.shopping()
         else:
             self.clean_house()
 
@@ -157,22 +159,24 @@ class Wife(Man):
         if self.house.money == 0:
             cprint(f'{self.name} В доме нет денег на еду', color='yellow')
             return
-        if self.house.money > 90:
-            self.house.food += 90
-            self.house.money -= 90
-        else:
-            self.house.food = self.house.money
-            self.house.money = 0
-        cprint(f'{self.name} Купила еды', color='yellow')
+        if self.house.food < 60:
+            if self.house.money > 90:
+                self.house.food += 90
+                self.house.money -= 90
+            else:
+                self.house.food = self.house.money
+                self.house.money = 0
+            cprint(f'{self.name} Купила еды', color='yellow')
 
-        if self.house.cat_food < 30:
-            if self.house.money >= 30:
-                self.house.money -= 30
-                self.house.cat_food += 30
+        if self.house.cat_food < 20 * Cat.total_cat:
+            if self.house.money >= 20 * Cat.total_cat:
+                self.house.money -= 20 * Cat.total_cat
+                self.house.cat_food += 20 * Cat.total_cat
             else:
                 self.house.cat_food += self.house.money
                 self.house.money = 0
-
+            cprint(f'{self.name} Купила еды', color='yellow')
+            
     def buy_fur_coat(self):
         self.degree_of_satiety -= 10
         if self.house.money >= 350:
@@ -212,7 +216,7 @@ class Child(Man):
             House.total_food += 10
             return f'{self.name} поел'
         elif self.house.food == 0:
-            return f'{self.name}В доме нет еды'
+            self.sleep()
         else:
             self.degree_of_satiety += self.house.food * 2
             House.total_food += self.house.food
@@ -234,15 +238,19 @@ class Child(Man):
             self.sleep()
 
     def sleep(self):
+        self.degree_of_satiety -= 10
         cprint(f'{self.name} поспал', color='green')
 
 
 class Cat:
+    total_cat = 0
 
     def __init__(self, name, house):
+        Cat.total_cat += 1
         self.name = name
         self.house = house
         self.degree_of_satiety = 30
+        self.status = 'alive'
 
     def __str__(self):
         return f'Я кот {self.name}, моя сытость {self.degree_of_satiety}'
@@ -250,6 +258,8 @@ class Cat:
     def act(self):
         if self.degree_of_satiety <= 0:
             cprint(f'{self.name} умер с голодухи', color='red')
+            self.status = 'die'
+            Cat.total_cat -= 1
             return
         if self.degree_of_satiety <= 20 and self.house.cat_food > 0:
             self.eat()
@@ -284,17 +294,20 @@ serge = Husband(name='Сережа', house=home)
 masha = Wife(name='Маша', house=home)
 dron = Child(name='ДРОН', house=home)
 list_cat = []
-for number_cat in range(1, 6):
+for number_cat in range(0, 13):
     list_cat.append(Cat(name=str(number_cat), house=home))
 
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
-    home.dirt += 40
+    home.dirt += 5
     serge.act()
     masha.act()
     dron.act()
     for cat in list_cat:
-        cat.act()
+        if cat.status == 'die':
+            list_cat.remove(cat)
+        else:
+            cat.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(dron, color='cyan')
@@ -305,6 +318,7 @@ print('\n ========== ИТОГИ ===========\n')
 cprint(f'Cьедено еды {House.total_food}')
 cprint(f'Заработано денег {Husband.total_money}')
 cprint(f'Куплено шуб {Wife.total_fur_coat}')
+cprint(f'Выжило котов {Cat.total_cat}')
 
 # сколько было заработано денег, сколько сьедено еды, сколько куплено шуб.
 ######################################################## Часть вторая
