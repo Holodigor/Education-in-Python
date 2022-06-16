@@ -50,9 +50,10 @@ class House:
         self.food = 50
         self.money = 100
         self.dirt = 0
+        self.cat_food = 30
 
     def __str__(self):
-        return f'В доме денег {self.money}, грязи {self.dirt}, еды {self.food}'
+        return f'В доме денег {self.money}, грязи {self.dirt}, еды {self.food}, еды для кота {self.cat_food} '
 
 
 class Man:
@@ -164,6 +165,14 @@ class Wife(Man):
             self.house.money = 0
         cprint(f'{self.name} Купила еды', color='yellow')
 
+        if self.house.cat_food < 30:
+            if self.house.money >= 30:
+                self.house.money -= 30
+                self.house.cat_food += 30
+            else:
+                self.house.cat_food += self.house.money
+                self.house.money = 0
+
     def buy_fur_coat(self):
         self.degree_of_satiety -= 10
         if self.house.money >= 350:
@@ -228,20 +237,64 @@ class Child(Man):
         cprint(f'{self.name} поспал', color='green')
 
 
+class Cat:
+
+    def __init__(self, name, house):
+        self.name = name
+        self.house = house
+        self.degree_of_satiety = 30
+
+    def __str__(self):
+        return f'Я кот {self.name}, моя сытость {self.degree_of_satiety}'
+
+    def act(self):
+        if self.degree_of_satiety <= 0:
+            cprint(f'{self.name} умер с голодухи', color='red')
+            return
+        if self.degree_of_satiety <= 20 and self.house.cat_food > 0:
+            self.eat()
+        else:
+            choice = randint(1, 2)
+            self.sleep() if choice == 1 else self.soil()
+
+    def eat(self):
+        if self.house.cat_food <= 0:
+            cprint(f'в доме нет еды для кота', color='magenta')
+            return
+        if self.house.cat_food >= 10:
+            self.house.cat_food -= 10
+            self.degree_of_satiety += 20
+        else:
+            self.degree_of_satiety += self.house.cat_food * 2
+            self.house.cat_food = 0
+        cprint(f'Кот {self.name} поел', color='magenta')
+
+    def sleep(self):
+        self.degree_of_satiety -= 10
+        cprint(f'Кот {self.name} поспал', color='magenta')
+
+    def soil(self):
+        self.degree_of_satiety -= 10
+        self.house.dirt += 5
+        cprint(f'кот {self.name} Драл обоии', color='magenta')
+
 home = House()
 serge = Husband(name='Сережа', house=home)
 masha = Wife(name='Маша', house=home)
 dron = Child(name='ДРОН', house=home)
+murzik = Cat(name='Мурзик', house=home)
 
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
-    home.dirt += 45
+    home.dirt += 40
     serge.act()
     masha.act()
     dron.act()
+    murzik.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(dron, color='cyan')
+    cprint(murzik, color='cyan')
     cprint(home, color='cyan')
 print('\n ========== ИТОГИ ===========\n')
 cprint(f'Cьедено еды {House.total_food}')
