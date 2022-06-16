@@ -172,7 +172,7 @@ class Wife(Man):
             cprint(f'{self.name} Купила шубу', color='yellow')
             Wife.total_fur_coat += 1
         else:
-            cprint(f'{self.name} На шубу нехватило денег', color='yellow')
+            cprint(f'{self.name} На шубу не хватило денег', color='yellow')
 
     def clean_house(self):
         self.degree_of_satiety -= 10
@@ -181,22 +181,67 @@ class Wife(Man):
             cprint(f'{self.name} Убрала в квартире', color='yellow')
         elif self.house.dirt > 0:
             self.house.dirt = 0
-            cprint(f' {self.name} Убрала в квартире', color='yellow')
+            cprint(f'{self.name} Убрала в квартире', color='yellow')
         else:
             cprint(f'{self.name} В квартире чисто', color='yellow')
+
+
+class Child(Man):
+
+    def __init__(self, name, house):
+        super().__init__()
+        self.name = name
+        self.house = house
+
+    def __str__(self):
+        return f'{self.name} ' + super().__str__()
+
+    def eat(self):
+        if self.house.food >= 10:
+            self.degree_of_satiety += 20
+            self.house.food -= 10
+            House.total_food += 10
+            return f'{self.name} поел'
+        elif self.house.food == 0:
+            return f'{self.name}В доме нет еды'
+        else:
+            self.degree_of_satiety += self.house.food * 2
+            House.total_food += self.house.food
+            self.house.food = 0
+            return f'{self.name} поел'
+
+    def act(self):
+        if self.degree_of_satiety <= 0:
+            cprint(f'{self.name} умерла с голодухи', color='red')
+            return
+
+        if self.degree_of_happiness < 10:
+            cprint(f'{self.name} умерла от депресии', color='red')
+            return
+
+        if self.degree_of_satiety < 30:
+            cprint(self.eat(), color='green')
+        else:
+            self.sleep()
+
+    def sleep(self):
+        cprint(f'{self.name} поспал', color='green')
 
 
 home = House()
 serge = Husband(name='Сережа', house=home)
 masha = Wife(name='Маша', house=home)
+dron = Child(name='ДРОН', house=home)
 
 for day in range(365):
     cprint('================== День {} =================='.format(day), color='red')
     home.dirt += 45
     serge.act()
     masha.act()
+    dron.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
+    cprint(dron, color='cyan')
     cprint(home, color='cyan')
 print('\n ========== ИТОГИ ===========\n')
 cprint(f'Cьедено еды {House.total_food}')
