@@ -45,8 +45,11 @@ from random import randint
 
 class House:
     total_food = 0
+    total_money = 0
 
     def __init__(self):
+        House.total_food = 0
+        House.total_money = 0
         self.food = 50
         self.money = 100
         self.dirt = 0
@@ -81,12 +84,12 @@ class Man:
 
 
 class Husband(Man):
-    total_money = 0
 
-    def __init__(self, name, house):
+    def __init__(self, name, house, salary=150):
         super().__init__()
         self.name = name
         self.house = house
+        self.salary = salary
 
     def __str__(self):
         return f'{self.name} ' + super().__str__()
@@ -109,10 +112,10 @@ class Husband(Man):
             self.work()
 
     def work(self):
-        self.house.money += 150
+        self.house.money += self.salary
         self.degree_of_satiety -= 10
-        Husband.total_money += 150
-        cprint(f'{self.name} усходил на роботу', color='blue')
+        House.total_money += self.salary
+        cprint(f'{self.name} сходил на роботу', color='blue')
 
     def gaming(self):
         self.degree_of_satiety -= 10
@@ -125,6 +128,7 @@ class Wife(Man):
 
     def __init__(self, name, house):
         super().__init__()
+        Wife.total_fur_coat = 0
         self.name = name
         self.house = house
 
@@ -176,7 +180,7 @@ class Wife(Man):
                 self.house.cat_food += self.house.money
                 self.house.money = 0
             cprint(f'{self.name} Купила еды', color='yellow')
-            
+
     def buy_fur_coat(self):
         self.degree_of_satiety -= 10
         if self.house.money >= 350:
@@ -243,10 +247,12 @@ class Child(Man):
 
 
 class Cat:
+    all_total_cat = 0
     total_cat = 0
 
     def __init__(self, name, house):
         Cat.total_cat += 1
+        Cat.all_total_cat += 1
         self.name = name
         self.house = house
         self.degree_of_satiety = 30
@@ -289,36 +295,101 @@ class Cat:
         cprint(f'кот {self.name} Драл обоии', color='magenta')
 
 
-home = House()
-serge = Husband(name='Сережа', house=home)
-masha = Wife(name='Маша', house=home)
-dron = Child(name='ДРОН', house=home)
-list_cat = []
-for number_cat in range(0, 13):
-    list_cat.append(Cat(name=str(number_cat), house=home))
+class Simulation:
 
-for day in range(365):
-    cprint('================== День {} =================='.format(day), color='red')
-    home.dirt += 5
-    serge.act()
-    masha.act()
-    dron.act()
-    for cat in list_cat:
-        if cat.status == 'die':
-            list_cat.remove(cat)
+    def __init__(self, money_incidents, food_incidents):
+        self.money_incidents = money_incidents
+        self.food_incidents = food_incidents
+        self.max_cats = 1
+
+    def experiment(self, salary=150):
+        Cat.total_cat = 0
+        Cat.all_total_cat = 0
+        home = House()
+        serge = Husband(name='Сережа', house=home, salary=salary)
+        masha = Wife(name='Маша', house=home)
+        dron = Child(name='ДРОН', house=home)
+        list_cat = []
+        for number_cat in range(0, self.max_cats):
+            list_cat.append(Cat(name=str(number_cat), house=home))
+
+        for day in range(365):
+            cprint('================== День {} =================='.format(day), color='red')
+            if self.money_incidents > 0:
+                if randint(0, 5) == 1:
+                    if home.money > 0:
+                        home.money = int(home.money / 2)
+                        self.money_incidents -= 1
+                        serge.degree_of_happiness += 100
+                        cprint(f'{serge.name} загулял')
+            if self.food_incidents > 0:
+                if randint(0, 5) == 1:
+                    if home.food > 0:
+                        home.food = int(home.food / 2)
+                        self.food_incidents -= 1
+                        cprint(f'Коты украли еду')
+                        for cat in list_cat:
+                            cat.degree_of_satiety += 20
+            home.dirt += 5
+            serge.act()
+            masha.act()
+            dron.act()
+            for cat in list_cat:
+                if cat.status == 'die':
+                    list_cat.remove(cat)
+                else:
+                    cat.act()
+            cprint(serge, color='cyan')
+            cprint(masha, color='cyan')
+            cprint(dron, color='cyan')
+            for cat in list_cat:
+                cprint(cat, color='cyan')
+            cprint(home, color='cyan')
+        print('\n ========== ИТОГИ ===========\n')
+        cprint(f'Cьедено еды {House.total_food}')
+        cprint(f'Заработано денег {House.total_money}')
+        cprint(f'Куплено шуб {Wife.total_fur_coat}')
+        cprint(f'Выжило котов {Cat.total_cat}  из {Cat.all_total_cat}')
+        return Cat.all_total_cat, Cat.total_cat
+
+
+res_experiment = []
+for food_incidents in range(2):
+    for money_incidents in range(2):
+        life = Simulation(money_incidents, food_incidents)
+        for salary in range(50, 451, 50):
+            while True:
+                all_total_cat, total_cat = life.experiment(salary=salary)
+                if all_total_cat != total_cat:
+                    res_experiment.append(''.join(str(life.max_cats - 1)))
+                    break
+                else:
+                    life.max_cats += 1
+food_incidents = 0
+money_incidents = 0
+print('                                       |   50  ||  100  ||  150  ||  200  ||  250  ||  300  ||  350  ||  400  ||  450  |')
+print('------------------------------------------------------------------------------------------------------------------------')
+print(f'food_incidents = {food_incidents} money_incidents = {money_incidents}', end=' ')
+enter = 9
+for i, max_cat in enumerate(res_experiment):
+    if i < enter:
+        if int(max_cat) < 10:
+            print(f'|    {max_cat}  |', end='')
         else:
-            cat.act()
-    cprint(serge, color='cyan')
-    cprint(masha, color='cyan')
-    cprint(dron, color='cyan')
-    for cat in list_cat:
-        cprint(cat, color='cyan')
-    cprint(home, color='cyan')
-print('\n ========== ИТОГИ ===========\n')
-cprint(f'Cьедено еды {House.total_food}')
-cprint(f'Заработано денег {Husband.total_money}')
-cprint(f'Куплено шуб {Wife.total_fur_coat}')
-cprint(f'Выжило котов {Cat.total_cat}')
+            print(f'|   {max_cat}  |', end='')
+    else:
+        print('')
+        print('------------------------------------------------------------------------------------------------------------------------')
+        print(f'food_incidents = {food_incidents} money_incidents = {money_incidents}', end=' ')
+        print(f'|    {max_cat}  |', end='')
+        enter += 9
+        if money_incidents == 6:
+            money_incidents = 0
+            food_incidents += 1
+        else:
+            money_incidents += 1
+
+
 
 # сколько было заработано денег, сколько сьедено еды, сколько куплено шуб.
 ######################################################## Часть вторая
