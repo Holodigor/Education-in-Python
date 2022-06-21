@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 import os, time, shutil
@@ -34,8 +33,61 @@ import os, time, shutil
 #
 # Чтение документации/гугла по функциям - приветствуется. Как и поиск альтернативных вариантов :)
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
+from abc import abstractmethod, ABCMeta
+from os import walk, path, makedirs
 
-# TODO здесь ваш код
+
+# fl = {'file1':['year', 'mons'],
+#       'file2':['year', 'mons'],
+        ..........
+#       }
+
+class SortByTime(metaclass=ABCMeta):
+
+    def __init__(self):
+        self.list_name_files = []
+        self.list_path_sort_file = {}
+        pass
+
+    def _copy_files(self):
+        pass
+
+    def _make_dir(self):
+        _path = os.path.dirname(__file__)
+        for file, data_list in self.list_path_sort_file:
+            new_dir = os.path.join(_path, data_list[0], data_list[1])
+            os.makedirs(new_dir, exist_ok=True )
+
+    def _get_data_file(self):
+        for file in self.list_name_files:
+            os.path.getctime(
+
+            )
+
+
+    @abstractmethod
+    def make_lis_name_files(self):
+        pass
+
+    def sort_files(self):
+        pass
+
+
+class UnZipFile:
+
+    def __init__(self, file_name, file_zip_name):
+        self.file_name = file_name
+        self.file_zip_name = file_zip_name
+
+    def _one_un_zip_file(self):
+        pass
+
+    def _all_un_zip_file(self):
+        pass
+
+    def un_un_zip_file(self):
+        pass
+
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
