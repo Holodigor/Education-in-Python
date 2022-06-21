@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import os, time, shutil
+import time, shutil, os
+import zipfile
+from abc import abstractmethod, ABCMeta
+
 
 # Нужно написать скрипт для упорядочивания фотографий (вообще любых файлов)
 # Скрипт должен разложить файлы из одной папки по годам и месяцам в другую.
@@ -33,61 +36,76 @@ import os, time, shutil
 #
 # Чтение документации/гугла по функциям - приветствуется. Как и поиск альтернативных вариантов :)
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
-from abc import abstractmethod, ABCMeta
-from os import walk, path, makedirs
 
 
 # fl = {'file1':['year', 'mons'],
 #       'file2':['year', 'mons'],
-        ..........
+#         ..........
 #       }
 
 class SortByTime(metaclass=ABCMeta):
 
     def __init__(self):
-        self.list_name_files = []
         self.list_path_sort_file = {}
-        pass
 
+    @abstractmethod
     def _copy_files(self):
         pass
 
-    def _make_dir(self):
-        _path = os.path.dirname(__file__)
-        for file, data_list in self.list_path_sort_file:
-            new_dir = os.path.join(_path, data_list[0], data_list[1])
-            os.makedirs(new_dir, exist_ok=True )
-
-    def _get_data_file(self):
-        for file in self.list_name_files:
-            os.path.getctime(
-
-            )
-
-
     @abstractmethod
-    def make_lis_name_files(self):
+    def _make_list_name_files(self):
         pass
+
+    def _make_dir(self):
+        for new_dir in self.list_path_sort_file.values():
+            os.makedirs(new_dir, exist_ok=True)
 
     def sort_files(self):
-        pass
+        self._make_list_name_files()
+        self._make_dir()
+        self._copy_files()
 
 
-class UnZipFile:
+class SortByTimeZip(SortByTime):
 
-    def __init__(self, file_name, file_zip_name):
-        self.file_name = file_name
-        self.file_zip_name = file_zip_name
+    def __init__(self, file_zip_name):
+        super().__init__()
+        self.file_zip_name = zipfile.ZipFile(file_zip_name, mode='r')
 
-    def _one_un_zip_file(self):
-        pass
+    def _copy_files(self):
+        for file_name, path in self.list_path_sort_file.items():
+            file = self.file_zip_name.extract(member=file_name)
+            shutil.copy2(file, path)
+            os.del.file
 
-    def _all_un_zip_file(self):
-        pass
+    def _make_list_name_files(self):
+        my_list = [i for i in self.file_zip_name.namelist() if not i.endswith('/')]
+        _path = os.path.dirname(__file__)
+        for file in my_list:
+            date = self.file_zip_name.getinfo(file).date_time
+            self.list_path_sort_file[file] = os.path.join(_path, str(date[0]), str(date[1]))
 
-    def un_un_zip_file(self):
-        pass
 
+class SortByTimeDir(SortByTime):
+
+    def __init__(self, dir_name):
+        super().__init__()
+        self.dir_name = dir_name
+
+    def _make_list_name_files(self):
+        _path = os.path.dirname(__file__)
+        for dir_path, dir_names, file_name in os.walk(self.dir_name):
+            file = os.path.join(dir_path, file_name)
+            date = time.gmtime(os.path.getctime(file))
+            self.list_path_sort_file[file] = os.path.join(_path, str(date[0]), str(date[1]))
+
+    def _copy_files(self):
+        for source, destination in self.list_path_sort_file.items():
+            shutil.copy2(source, destination)
+
+
+sort = SortByTimeZip(file_zip_name='icons.zip')
+sort.sort_files()
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
