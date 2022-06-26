@@ -70,20 +70,22 @@ class SortByTimeZip(SortByTime):
 
     def __init__(self, file_zip_name):
         super().__init__()
-        self.file_zip_name = zipfile.ZipFile(file_zip_name, mode='r')
+        self.file_zip_name = file_zip_name
 
     def _copy_files(self):
-        for file_name, path in self.list_path_sort_file.items():
-            file = self.file_zip_name.extract(member=file_name)
-            shutil.copy2(file, path)
-            os.del.file
+        with zipfile.ZipFile(self.file_zip_name) as my_zip:
+            for member, path in self.list_path_sort_file.items():
+                with my_zip.open(member) as source:
+                    with open(os.path.join(path, os.path.basename(member)), 'wb') as target:
+                        shutil.copyfileobj(source, target)
 
     def _make_list_name_files(self):
-        my_list = [i for i in self.file_zip_name.namelist() if not i.endswith('/')]
         _path = os.path.dirname(__file__)
-        for file in my_list:
-            date = self.file_zip_name.getinfo(file).date_time
-            self.list_path_sort_file[file] = os.path.join(_path, str(date[0]), str(date[1]))
+        with zipfile.ZipFile(file=self.file_zip_name) as my_zip:
+            my_list = [i for i in my_zip.namelist() if not i.endswith('/')]
+            for file in my_list:
+                date = my_zip.getinfo(file).date_time
+                self.list_path_sort_file[file] = os.path.join(_path, str(date[0]), str(date[1]))
 
 
 class SortByTimeDir(SortByTime):
@@ -95,15 +97,19 @@ class SortByTimeDir(SortByTime):
     def _make_list_name_files(self):
         _path = os.path.dirname(__file__)
         for dir_path, dir_names, file_name in os.walk(self.dir_name):
-            file = os.path.join(dir_path, file_name)
-            date = time.gmtime(os.path.getctime(file))
-            self.list_path_sort_file[file] = os.path.join(_path, str(date[0]), str(date[1]))
+            for file in file_name:
+                file = os.path.join(dir_path, file)
+                date = time.gmtime(os.path.getmtime(file))
+                self.list_path_sort_file[file] = os.path.join(_path, str(date[0]), str(date[1]))
 
     def _copy_files(self):
         for source, destination in self.list_path_sort_file.items():
             shutil.copy2(source, destination)
 
 
+# with zipfile.ZipFile('icons.zip') as my_zip:
+#     my_zip.extractall()
+#
 sort = SortByTimeZip(file_zip_name='icons.zip')
 sort.sort_files()
 
